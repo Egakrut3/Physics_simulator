@@ -2,7 +2,8 @@
 
 #include <iostream>
 
-Molecule::Molecule() = default;
+Molecule::Molecule()
+	: weight_(), x_coor_(), y_coor_(), x_speed_(), y_speed_() {}
 Molecule::Molecule(Measure_t const weight, Measure_t const x_coor,
 				   Measure_t const y_coor, Measure_t const x_speed,
 				   Measure_t const y_speed)
