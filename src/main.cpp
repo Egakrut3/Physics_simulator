@@ -1,12 +1,13 @@
 #include <iostream>
-#include "Simulator_physics.hpp"
+#include "PhysicsSimulator.hpp"
 
 // How to differ between Compilation end and Build end
 // How to avoid scope resolution operator in cpp
 
 int main() {
-	SimpleMolecule test_mol(1, 2, 3, 4, 5);
-	static_cast<Molecule &>(test_mol).print();
+	using namespace PhysicsSimulator;
+
+	SimpleMolecule test_mol(Vector2(1, 2), Vector2(3, 4), 5);
 
 	return 0;
 }
