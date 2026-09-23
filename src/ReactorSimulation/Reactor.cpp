@@ -1,7 +1,6 @@
 #include "ReactorSimulation/Types.hpp"
 
 #include <cassert>
-#include <iostream>
 
 namespace ReactorSimulation {
 
@@ -15,8 +14,8 @@ Reactor::Reactor(Measure_t const &left_bound, Measure_t const &right_bound,
 	top_bound_(top_bound),
 	molecule_arr_start_(new Molecule *[DEFAULT_MOLECULE_ARR_SIZE]),
 	molecule_arr_finish_(molecule_arr_start_),
-	molecule_arr_end_of_storage_(molecule_arr_start_
-								 + DEFAULT_MOLECULE_ARR_SIZE) {}
+	molecule_arr_end_of_storage_(molecule_arr_start_ +
+								 DEFAULT_MOLECULE_ARR_SIZE) {}
 Reactor::~Reactor() {
 	for (Molecule **mol = molecule_arr_start_; mol != molecule_arr_finish_;
 		 ++mol) {
@@ -26,10 +25,10 @@ Reactor::~Reactor() {
 	delete[] molecule_arr_start_;
 }
 
-void Reactor::add_molecule(SimpleMolecule const &mol) {
+void Reactor::add_molecule(SimpleMolecule *const mol) {
 	assert(molecule_arr_finish_ != molecule_arr_end_of_storage_);
 
-	*molecule_arr_finish_++ = new SimpleMolecule(mol);
+	*molecule_arr_finish_++ = mol;
 }
 
 } // namespace ReactorSimulation

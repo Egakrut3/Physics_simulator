@@ -64,7 +64,7 @@ public:
 
 	Reactor &operator=(Reactor const &src) = delete;
 
-	void add_molecule(SimpleMolecule const &mol);
+	void add_molecule(SimpleMolecule *mol);
 
 private:
 	Measure_t left_bound_;

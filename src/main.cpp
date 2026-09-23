@@ -14,9 +14,7 @@ static void test_reactor_simulation() {
 	Reactor test_reactor(-10, 10, -10, 10);
 
 	test_reactor.add_molecule(
-	SimpleMolecule(MaterialPoint(Vector2(1, 2), Vector2(3, 4), 5), 6));
-	SimpleMolecule mol(MaterialPoint(Vector2(1, 2), Vector2(3, 4), 5), 6);
-	test_reactor.add_molecule(mol);
+		new SimpleMolecule(MaterialPoint(Vector2(1, 2), Vector2(3, 4), 5), 6));
 }
 
 int main() {
