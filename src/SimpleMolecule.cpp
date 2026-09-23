@@ -1,10 +1,10 @@
-#include "PhysicsSimulator.hpp"
+#include "ReactorTypes.hpp"
 
-namespace PhysicsSimulator {
+namespace Reactor {
 
 SimpleMolecule::SimpleMolecule(Vector2 const position, Vector2 const velocity,
 							   Weight_t const weight)
-	: Molecule(position, velocity, weight) {}
+	: MaterialPoint(position, velocity, weight) {}
 SimpleMolecule::~SimpleMolecule() = default;
 
-} // namespace PhysicsSimulator
+} // namespace Reactor

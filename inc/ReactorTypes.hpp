@@ -1,9 +1,9 @@
-#ifndef PHYSYCS_SIMULATOR
-#define PHYSYCS_SIMULATOR
+#ifndef REACTOR_TYPES
+#define REACTOR_TYPES
 
 #include <cstddef>
 
-namespace PhysicsSimulator {
+namespace Reactor {
 
 typedef double Measure_t;
 
@@ -18,11 +18,11 @@ public:
 
 typedef std::size_t Weight_t;
 
-class Molecule {
+class MaterialPoint {
 public:
-	Molecule() = delete;
-	explicit Molecule(Vector2 position, Vector2 velocity, Weight_t weight);
-	virtual ~Molecule();
+	MaterialPoint() = delete;
+	explicit MaterialPoint(Vector2 position, Vector2 velocity, Weight_t weight);
+	virtual ~MaterialPoint();
 
 protected:
 	Vector2 position_;
@@ -31,13 +31,14 @@ protected:
 	Weight_t weight_;
 };
 
-class SimpleMolecule : virtual public Molecule {
+class SimpleMolecule : public MaterialPoint {
 public:
 	SimpleMolecule() = delete;
-	explicit SimpleMolecule(Vector2 position, Vector2 velocity, Weight_t weight);
+	explicit SimpleMolecule(Vector2 position, Vector2 velocity,
+							Weight_t weight);
 	~SimpleMolecule() override;
 };
 
-} // PhysicsSimulator
+} // namespace Reactor
 
 #endif
