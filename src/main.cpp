@@ -1,12 +1,26 @@
 #include <iostream>
-#include "ReactorTypes.hpp"
+#include "ReactorSimulation/Types.hpp"
 
-// How to differ between Compilation end and Build end
+// TODO - Switch to value initialization {}
+// TODO - not delete Reactor()
+// TODO - restirct
+// TODO - C++ modules
+// TODO - My macros
+// TODO - How to differ between Compilation end and Build end
+
+static void test_reactor_simulation() {
+	using namespace ReactorSimulation;
+
+	Reactor test_reactor(-10, 10, -10, 10);
+
+	test_reactor.add_molecule(
+	SimpleMolecule(MaterialPoint(Vector2(1, 2), Vector2(3, 4), 5), 6));
+	SimpleMolecule mol(MaterialPoint(Vector2(1, 2), Vector2(3, 4), 5), 6);
+	test_reactor.add_molecule(mol);
+}
 
 int main() {
-	using namespace Reactor;
-
-	SimpleMolecule test_mol(MaterialPoint(Vector2(1, 2), Vector2(3, 4), 5), 6);
+	test_reactor_simulation();
 
 	return 0;
 }
