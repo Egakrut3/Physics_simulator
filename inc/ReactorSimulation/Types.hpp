@@ -2,56 +2,85 @@
 #define REACTOR_TYPES
 
 #include <cstddef>
+#include <vector>
 
 namespace ReactorSimulation {
 
 typedef double Measure_t;
 typedef std::size_t Weight_t;
 
-class Vector2 {
+class Vector2D {
 public:
-    explicit Vector2();
-    explicit Vector2(Measure_t const &x_coor, Measure_t const &y_coor);
+    explicit Vector2D();
+    explicit Vector2D(Measure_t const &x_coor, Measure_t const &y_coor);
+
+    Vector2D &operator-=(Vector2D const &vec);
+
+    Measure_t len2() const;
+    Measure_t len() const;
 
     Measure_t x_coor_;
     Measure_t y_coor_;
 };
+Vector2D operator-(Vector2D const &left, Vector2D const &right);
 
 class MaterialPoint {
 public:
     MaterialPoint() = delete;
-    explicit MaterialPoint(Vector2 const &position, Vector2 const &velocity,
+    explicit MaterialPoint(Vector2D const &position, Vector2D const &velocity,
                            Weight_t const &weight);
     ~MaterialPoint();
 
-protected:
-    Vector2 position_;
-    Vector2 velocity_;
+    Vector2D position_;
+    Vector2D velocity_;
 
     Weight_t const weight_;
 };
 
+class SimpleMolecule;
+class ComplexMolecule;
+
 class Molecule {
 public:
-    Molecule() = delete;
-    explicit Molecule(MaterialPoint const &center);
-    explicit Molecule(Molecule const &mol);
     virtual ~Molecule();
 
-protected:
+    virtual bool collide_with(Molecule const &mol) const = 0;
+    virtual bool collide_with(SimpleMolecule const &mol) const = 0;
+    virtual bool collide_with(ComplexMolecule const &mol) const = 0;
+
     MaterialPoint center_;
+
+protected:
+    Molecule() = delete;
+    explicit Molecule(MaterialPoint const &center);
 };
 
-class SimpleMolecule : virtual public Molecule {
+class SimpleMolecule : public Molecule {
 public:
     SimpleMolecule() = delete;
     explicit SimpleMolecule(MaterialPoint const &center,
                             Measure_t const &radius);
-    explicit SimpleMolecule(SimpleMolecule const &src);
     ~SimpleMolecule() override;
 
-private:
+    bool collide_with(Molecule const &mol) const override;
+    bool collide_with(SimpleMolecule const &mol) const override;
+    bool collide_with(ComplexMolecule const &mol) const override;
+
     Measure_t const radius_;
+};
+
+class ComplexMolecule : public Molecule {
+public:
+    ComplexMolecule() = delete;
+    explicit ComplexMolecule(MaterialPoint const &center,
+                             Measure_t const &side_len);
+    ~ComplexMolecule() override;
+
+    bool collide_with(Molecule const &mol) const override;
+    bool collide_with(SimpleMolecule const &mol) const override;
+    bool collide_with(ComplexMolecule const &mol) const override;
+
+    Measure_t const side_len_;
 };
 
 class Reactor {
@@ -64,17 +93,15 @@ public:
 
     Reactor &operator=(Reactor const &src) = delete;
 
-    void add_molecule(SimpleMolecule *mol);
+    void add_molecule(Molecule *mol);
+
+    std::vector<Molecule *> molecule_arr_;
 
 private:
     Measure_t left_bound_;
     Measure_t right_bound_;
     Measure_t bottom_bound_;
     Measure_t top_bound_;
-
-    Molecule **molecule_arr_start_;
-    Molecule **molecule_arr_finish_;
-    Molecule **molecule_arr_end_of_storage_;
 };
 
 } // namespace ReactorSimulation
