@@ -1,4 +1,3 @@
-#include <iostream>
 #include "ReactorSimulation/Types.hpp"
 
 // TODO - Switch to value initialization {}
@@ -9,16 +8,16 @@
 // TODO - How to differ between Compilation end and Build end
 
 static void test_reactor_simulation() {
-	using namespace ReactorSimulation;
+    using namespace ReactorSimulation;
 
-	Reactor test_reactor(-10, 10, -10, 10);
+    Reactor test_reactor(-10, 10, -10, 10);
 
-	test_reactor.add_molecule(
-		new SimpleMolecule(MaterialPoint(Vector2(1, 2), Vector2(3, 4), 5), 6));
+    test_reactor.add_molecule(
+        new SimpleMolecule(MaterialPoint(Vector2(1, 2), Vector2(3, 4), 5), 6));
 }
 
 int main() {
-	test_reactor_simulation();
+    test_reactor_simulation();
 
-	return 0;
+    return 0;
 }

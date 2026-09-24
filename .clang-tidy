@@ -59,9 +59,3 @@ CheckOptions:
     value: '1'
   - key: readability-simplify-boolean-expr.ChainedConditionalAssignment
     value: '1'
-
-  # Task interface
-  - key: readability-identifier-naming.NamespaceIgnoredRegexp
-    value: 'intro'
-  - key: readability-identifier-naming.FunctionIgnoredRegexp
-    value: 'Range'
