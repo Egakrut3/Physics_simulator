@@ -10,14 +10,14 @@ Reactor::Reactor(Measure_t const &left_bound, Measure_t const &right_bound,
     bottom_bound_(bottom_bound),
     top_bound_(top_bound) {}
 Reactor::~Reactor() {
-    for (std::vector<Molecule *>::iterator elem = molecule_arr_.begin();
+    for (std::unordered_set<Molecule *>::iterator elem = molecule_arr_.begin();
          elem != molecule_arr_.end(); ++elem) {
         delete *elem;
     }
 }
 
 void Reactor::add_molecule(Molecule *const mol) {
-    molecule_arr_.push_back(mol);
+    molecule_arr_.insert(mol);
 }
 
 } // namespace ReactorSimulation

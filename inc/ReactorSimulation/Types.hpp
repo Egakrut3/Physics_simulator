@@ -2,7 +2,7 @@
 #define REACTOR_TYPES
 
 #include <cstddef>
-#include <vector>
+#include <unordered_set>
 
 namespace ReactorSimulation {
 
@@ -95,7 +95,7 @@ public:
 
     void add_molecule(Molecule *mol);
 
-    std::vector<Molecule *> molecule_arr_;
+    std::unordered_set<Molecule *> molecule_arr_;
 
 private:
     Measure_t left_bound_;
