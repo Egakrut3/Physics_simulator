@@ -25,7 +25,7 @@ bool ComplexMolecule::collide_with(SimpleMolecule const &mol) const {
                                 center_.position_.y_coor_ - half_side_len,
                                 center_.position_.y_coor_ + half_side_len)) -
             mol.center_.position_)
-               .len2() <= mol.radius_;
+               .len2() <= mol.radius_ * mol.radius_;
 }
 
 bool ComplexMolecule::collide_with(ComplexMolecule const &mol) const {

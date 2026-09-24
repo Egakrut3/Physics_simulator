@@ -18,7 +18,7 @@ static void test_reactor_simulation() {
 
     SimpleMolecule s_mol1(MaterialPoint(Vector2D(0, 0), Vector2D(0, 0), 10), 5);
     SimpleMolecule s_mol2(MaterialPoint(Vector2D(6, 8), Vector2D(0, 0), 10), 5);
-    ComplexMolecule c_mol(MaterialPoint(Vector2D(0, -5), Vector2D(0, 0), 10),
+    ComplexMolecule c_mol(MaterialPoint(Vector2D(0, -7.5), Vector2D(0, 0), 10),
                           5);
 
     Molecule &r1 = s_mol1;
