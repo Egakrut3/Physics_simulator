@@ -16,8 +16,4 @@ Reactor::~Reactor() {
     }
 }
 
-void Reactor::add_molecule(Molecule *const mol) {
-    molecule_arr_.insert(mol);
-}
-
 } // namespace ReactorSimulation

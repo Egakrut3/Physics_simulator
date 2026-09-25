@@ -1,5 +1,5 @@
-#include "ReactorSimulation/Types.hpp"
-#include <iostream>
+#include "ReactorSimulation/GraphicEngine.hpp"
+#include "ReactorSimulation/PhysicsEngine.hpp"
 
 namespace ReactorSimulation {
 
@@ -8,22 +8,22 @@ SimpleMolecule::SimpleMolecule(MaterialPoint const &center,
     Molecule(center), radius_(radius) {}
 SimpleMolecule::~SimpleMolecule() = default;
 
-bool SimpleMolecule::collide_with(Molecule const &mol) const {
-    std::cout << "Called from Simple" << std::endl;
-
-    return mol.collide_with(*this);
+void SimpleMolecule::draw(GraphicEngine &gr_eng) const {
+    gr_eng.draw(*this);
 }
 
-bool SimpleMolecule::collide_with(SimpleMolecule const &mol) const {
-    std::cout << "Simple and Simple" << std::endl;
-    return (center_.position_ - mol.center_.position_).len2() <=
-           (radius_ + mol.radius_) * (radius_ + mol.radius_);
+void SimpleMolecule::advance(PhysicsEngine const &ph_eng, Measure_t const &dt) {
+    ph_eng.advance(*this, dt);
 }
 
-bool SimpleMolecule::collide_with(ComplexMolecule const &mol) const {
-    std::cout << "Simple and Complex" << std::endl;
-
-    return mol.collide_with(*this);
+bool SimpleMolecule::collide(Molecule const &mol, PhysicsEngine const &ph_eng) const {
+    return mol.collide(*this, ph_eng);
+}
+bool SimpleMolecule::collide(SimpleMolecule const &mol, PhysicsEngine const &ph_eng) const {
+    return ph_eng.collide(mol, *this);
+}
+bool SimpleMolecule::collide(ComplexMolecule const &mol, PhysicsEngine const &ph_eng) const {
+    return ph_eng.collide(mol, *this);
 }
 
 } // namespace ReactorSimulation

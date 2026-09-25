@@ -1,7 +1,9 @@
-REACTOR_SIMULATION_INC	= Types PhysicsEngine
+LINKER_FIXED_OPTIONS	+= -lsfml-graphics -lsfml-window -lsfml-system
+
+REACTOR_SIMULATION_INC	= Types GraphicEngine PhysicsEngine
 INC						= $(addprefix ReactorSimulation/,$(REACTOR_SIMULATION_INC))
 
-REACTOR_SIMULATION_SRC	= Vector2D MaterialPoint Molecule SimpleMolecule ComplexMolecule Reactor PhysicsEngine
+REACTOR_SIMULATION_SRC	= Vector2D MaterialPoint Molecule SimpleMolecule ComplexMolecule Reactor GraphicEngine PhysicsEngine
 SRC						= $(addprefix ReactorSimulation/,$(REACTOR_SIMULATION_SRC)) main
 
 COMMON_MAKEFILE = Common_Makefile.mk

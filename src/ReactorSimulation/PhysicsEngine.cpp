@@ -1,12 +1,51 @@
 #include "ReactorSimulation/PhysicsEngine.hpp"
-#include <iostream>
+#include <cmath>
 
 namespace ReactorSimulation {
 
-void PhysicsEngine::advance_state(Reactor &reactor, Measure_t const &dt) {
+void PhysicsEngine::advance(Molecule &mol, Measure_t const &dt) const {
+    mol.advance(*this, dt);
+}
+void PhysicsEngine::advance(SimpleMolecule &mol, Measure_t const &dt) const {
+    mol.center_.position_ += mol.center_.velocity_ * dt;
+}
+void PhysicsEngine::advance(ComplexMolecule &mol, Measure_t const &dt) const {
+    mol.center_.position_ += mol.center_.velocity_ * dt;
+}
+
+bool PhysicsEngine::collide(Molecule const &mol1, Molecule const &mol2) const {
+    return mol1.collide(mol2, *this);
+}
+bool PhysicsEngine::collide(SimpleMolecule const &mol1, SimpleMolecule const &mol2) const {
+    return (mol1.center_.position_ - mol2.center_.position_).len2() <=
+           (mol1.radius_ + mol2.radius_) * (mol1.radius_ + mol2.radius_);
+}
+bool PhysicsEngine::collide(SimpleMolecule const &mol1, ComplexMolecule const &mol2) const {
+    Measure_t const half_side_len = mol2.side_len_ / 2;
+    return (Vector2D(std::clamp(mol1.center_.position_.x_coor_,
+                                mol2.center_.position_.x_coor_ - half_side_len,
+                                mol2.center_.position_.x_coor_ + half_side_len),
+                     std::clamp(mol1.center_.position_.y_coor_,
+                                mol2.center_.position_.y_coor_ - half_side_len,
+                                mol2.center_.position_.y_coor_ + half_side_len)) -
+            mol1.center_.position_)
+               .len2() <= mol1.radius_ * mol1.radius_;
+}
+bool PhysicsEngine::collide(ComplexMolecule const &mol1, SimpleMolecule const &mol2) const {
+    return collide(mol2, mol1);
+}
+bool PhysicsEngine::collide(ComplexMolecule const &mol1, ComplexMolecule const &mol2) const {
+    return std::max(std::abs(mol1.center_.position_.x_coor_ -
+                             mol2.center_.position_.x_coor_),
+                    std::abs(mol1.center_.position_.y_coor_ -
+                             mol2.center_.position_.y_coor_)) <=
+           (mol1.side_len_ + mol2.side_len_) / 2;
+}
+
+void PhysicsEngine::advance_state(Reactor &reactor, Measure_t const &dt) const {
     for (std::unordered_set<Molecule *>::iterator elem = reactor.molecule_arr_.begin();
          elem != reactor.molecule_arr_.end(); ++elem) {
-        (*elem)->center_.position_ += (*elem)->center_.velocity_ * dt;
+        advance(**elem, dt);
     }
 }
 
@@ -23,17 +62,17 @@ static void perform_simple_reflection(MaterialPoint &pnt1, MaterialPoint &pnt2) 
     pnt1.velocity_ = new_velocity1;
     pnt2.velocity_ = new_velocity2;
 
-    std::cout << "Reflection !!!" << std::endl;
-
     return;
 }
 
-void PhysicsEngine::perform_reflections(Reactor &reactor) {
+void PhysicsEngine::perform_reflections(Reactor &reactor) const {
     for (std::unordered_set<Molecule *>::iterator elem1 = reactor.molecule_arr_.begin();
          elem1 != reactor.molecule_arr_.end(); ++elem1) {
         for (std::unordered_set<Molecule *>::iterator elem2 = std::next(elem1);
              elem2 != reactor.molecule_arr_.end(); ++elem2) {
-            perform_simple_reflection((*elem1)->center_, (*elem2)->center_);
+            if (collide(**elem1, **elem2)) {
+                perform_simple_reflection((*elem1)->center_, (*elem2)->center_);
+            }
         }
     }
 }
