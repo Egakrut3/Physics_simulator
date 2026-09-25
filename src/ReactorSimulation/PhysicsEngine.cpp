@@ -1,5 +1,6 @@
 #include "ReactorSimulation/PhysicsEngine.hpp"
 #include <cmath>
+#include <algorithm>
 
 namespace ReactorSimulation {
 
@@ -97,22 +98,31 @@ void PhysicsEngine::advance_state(Reactor         &reactor,
 
 
 
-static Vector2D calculate_new_velocity(MaterialPoint const &pnt1,
-                                       MaterialPoint       &pnt2) {
-    return (pnt1.velocity_ *
-                static_cast<Measure_t>(pnt1.weight_ - pnt2.weight_) +
-            pnt2.velocity_ * static_cast<Measure_t>(2 * pnt2.weight_)) /
-           static_cast<Measure_t>(pnt1.weight_ + pnt2.weight_);
+static Measure_t calculate_new_velocity_projection(Measure_t const &proj1, Weight_t const &weight1, Measure_t const &proj2, Weight_t const &weight2) {
+    return ((proj1 * static_cast<Measure_t>(weight1 - weight2)) + (proj2 * static_cast<Measure_t>(2 * weight2))) / static_cast<Measure_t>(weight1 + weight2);
 }
 
 static void perform_simple_reflection(MaterialPoint &pnt1,
                                       MaterialPoint &pnt2) {
-    Vector2D new_velocity1 = calculate_new_velocity(pnt1, pnt2);
-    Vector2D new_velocity2 = calculate_new_velocity(pnt2, pnt1);
+    Vector2D vec12 = pnt2.position_ - pnt1.position_;
+    vec12 /= vec12.len();
 
-    pnt1.velocity_ = new_velocity1;
-    pnt2.velocity_ = new_velocity2;
+    Measure_t old_proj1 = pnt1.velocity_ * vec12;
+    Measure_t old_proj2 = pnt2.velocity_ * vec12;
+    if (old_proj1 - old_proj2 <= 0) {
+        return;
+    }
+
+    Measure_t new_proj1 = calculate_new_velocity_projection(old_proj1, pnt1.weight_,
+                                                            old_proj2, pnt2.weight_);
+    Measure_t new_proj2 = calculate_new_velocity_projection(old_proj2, pnt2.weight_,
+                                                            old_proj1, pnt1.weight_);
+
+    pnt1.velocity_ += (new_proj1 - old_proj1) * vec12;
+    pnt2.velocity_ += (new_proj2 - old_proj2) * vec12;
 }
+
+
 
 static void perform_horizontal_reflection(MaterialPoint &pnt, Measure_t const &x_coor) {
     if ((pnt.position_.x_coor_ < x_coor) == (pnt.velocity_.x_coor_ > 0)) {
@@ -124,6 +134,8 @@ static void perform_vertical_reflection(MaterialPoint &pnt, Measure_t const &y_c
         pnt.velocity_.y_coor_ = -pnt.velocity_.y_coor_;
     }
 }
+
+
 
 void PhysicsEngine::perform_reflections(Reactor &reactor) const {
     for (std::unordered_set<Molecule *>::iterator elem =

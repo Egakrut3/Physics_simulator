@@ -3,12 +3,13 @@
 
 #include <cstddef>
 #include <unordered_set>
-#include <chrono>
 
 namespace ReactorSimulation {
 
 typedef double      Measure_t;
 typedef std::size_t Weight_t;
+
+
 
 class Vector2D {
 public:
@@ -22,6 +23,7 @@ public:
     Vector2D &operator/=(Measure_t const &div);
 
     Measure_t len2() const;
+    Measure_t len() const;
 
     Measure_t x_coor_;
     Measure_t y_coor_;
@@ -31,6 +33,10 @@ Vector2D operator-(Vector2D const &left, Vector2D const &right);
 Vector2D operator*(Vector2D const &vec, Measure_t const &mlt);
 Vector2D operator*(Measure_t const &mlt, Vector2D const &vec);
 Vector2D operator/(Vector2D const &vec, Measure_t const &div);
+
+Measure_t operator*(Vector2D const &vec1, Vector2D const &vec2);
+
+
 
 class MaterialPoint {
 public:
@@ -44,6 +50,8 @@ public:
 
     Weight_t const weight_;
 };
+
+
 
 class GraphicEngine;
 class PhysicsEngine;
