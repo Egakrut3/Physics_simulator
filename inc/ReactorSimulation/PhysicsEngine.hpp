@@ -7,7 +7,9 @@ namespace ReactorSimulation {
 
 class PhysicsEngine {
 public:
+    explicit PhysicsEngine() = default;
     void advance_state(Reactor &reactor, Measure_t const &dt);
+    void perform_reflections(Reactor &reactor);
 };
 
 } // namespace ReactorSimulation

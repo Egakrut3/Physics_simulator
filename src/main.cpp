@@ -1,4 +1,4 @@
-#include "ReactorSimulation/Types.hpp"
+#include "ReactorSimulation/PhysicsEngine.hpp"
 #include <iostream>
 
 // TODO - Switch to value initialization {}
@@ -10,11 +10,6 @@
 
 static void test_reactor_simulation() {
     using namespace ReactorSimulation;
-
-    Reactor test_reactor(-10, 10, -10, 10);
-
-    test_reactor.add_molecule(new SimpleMolecule(
-        MaterialPoint(Vector2D(1, 2), Vector2D(3, 4), 5), 6));
 
     SimpleMolecule s_mol1(MaterialPoint(Vector2D(0, 0), Vector2D(0, 0), 10), 5);
     SimpleMolecule s_mol2(MaterialPoint(Vector2D(6, 8), Vector2D(0, 0), 10), 5);
@@ -28,6 +23,16 @@ static void test_reactor_simulation() {
     std::cout << r1.collide_with(r2) << std::endl << std::endl;
     std::cout << r2.collide_with(r3) << std::endl << std::endl;
     std::cout << r3.collide_with(r1) << std::endl << std::endl;
+
+    Reactor test_reactor(-10, 10, -10, 10);
+    test_reactor.add_molecule(new SimpleMolecule(
+        MaterialPoint(Vector2D(0, 0), Vector2D(1, 1), 5), 1));
+    test_reactor.add_molecule(new SimpleMolecule(
+        MaterialPoint(Vector2D(3, 3), Vector2D(-1, -1), 5), 1));
+
+    PhysicsEngine ph_eng{};
+    ph_eng.advance_state(test_reactor, 1);
+    ph_eng.perform_reflections(test_reactor);
 }
 
 int main() {

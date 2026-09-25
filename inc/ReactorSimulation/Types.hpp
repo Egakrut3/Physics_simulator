@@ -3,18 +3,23 @@
 
 #include <cstddef>
 #include <unordered_set>
+#include <chrono>
 
 namespace ReactorSimulation {
 
 typedef double Measure_t;
 typedef std::size_t Weight_t;
+typedef std::chrono::steady_clock Clock_t;
 
 class Vector2D {
 public:
     explicit Vector2D();
     explicit Vector2D(Measure_t const &x_coor, Measure_t const &y_coor);
 
+    Vector2D &operator+=(Vector2D const &vec);
     Vector2D &operator-=(Vector2D const &vec);
+    Vector2D &operator*=(Measure_t const &mlt);
+    Vector2D &operator/=(Measure_t const &div);
 
     Measure_t len2() const;
     Measure_t len() const;
@@ -22,7 +27,11 @@ public:
     Measure_t x_coor_;
     Measure_t y_coor_;
 };
+Vector2D operator+(Vector2D const &left, Vector2D const &right);
 Vector2D operator-(Vector2D const &left, Vector2D const &right);
+Vector2D operator*(Vector2D const &vec, Measure_t const &mlt);
+Vector2D operator*(Measure_t const &mlt, Vector2D const &vec);
+Vector2D operator/(Vector2D const &vec, Measure_t const &div);
 
 class MaterialPoint {
 public:
@@ -88,7 +97,6 @@ public:
     explicit Reactor() = delete;
     explicit Reactor(Measure_t const &left_bound, Measure_t const &right_bound,
                      Measure_t const &bottom_bound, Measure_t const &top_bound);
-    Reactor(Reactor const &src) = delete;
     virtual ~Reactor();
 
     Reactor &operator=(Reactor const &src) = delete;
