@@ -75,27 +75,31 @@ void GraphicEngine::draw_molecules(Reactor const &reactor) {
 }
 
 void GraphicEngine::draw_borders(Reactor const &reactor) {
-    float left_bound   = static_cast<float>(reactor.get_left_bound());
-    float right_bound  = static_cast<float>(reactor.get_right_bound());
-    float bottom_bound = static_cast<float>(reactor.get_bottom_bound());
-    float top_bound    = static_cast<float>(reactor.get_top_bound());
+    float const left_bound   = static_cast<float>(reactor.get_left_bound());
+    float const right_bound  = static_cast<float>(reactor.get_right_bound());
+    float const bottom_bound = static_cast<float>(reactor.get_bottom_bound());
+    float const top_bound    = static_cast<float>(reactor.get_top_bound());
+    float const border_width = static_cast<float>(reactor.get_border_width());
 
-    float hight = top_bound - bottom_bound;
-    float width = right_bound - left_bound;
+    float const hight = top_bound - bottom_bound;
+    float const width = right_bound - left_bound;
 
-    sf::RectangleShape border(sf::Vector2f(0, hight + 2));
-    border.setOutlineThickness(1);
+    sf::RectangleShape border(sf::Vector2f(0, hight + (2 * border_width)));
+    border.setOutlineThickness(border_width);
 
-    border.setPosition(sf::Vector2f(right_bound + 1, -top_bound - 1));
+    border.setPosition(
+        sf::Vector2f(right_bound + border_width, -top_bound - border_width));
     window_.draw(border);
 
-    border.setPosition(sf::Vector2f(left_bound - 1, -top_bound - 1));
+    border.setPosition(
+        sf::Vector2f(left_bound - border_width, -top_bound - border_width));
     window_.draw(border);
 
-    border.setSize(sf::Vector2f(width + 2, 0));
+    border.setSize(sf::Vector2f(width + (2 * border_width), 0));
     window_.draw(border);
 
-    border.setPosition(sf::Vector2f(left_bound - 1, -bottom_bound + 1));
+    border.setPosition(
+        sf::Vector2f(left_bound - border_width, -bottom_bound + border_width));
     window_.draw(border);
 }
 

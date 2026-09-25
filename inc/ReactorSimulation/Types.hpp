@@ -144,6 +144,7 @@ public:
     Measure_t get_right_bound() const;
     Measure_t get_bottom_bound() const;
     Measure_t get_top_bound() const;
+    Measure_t get_border_width() const;
 
     using Container_t::begin;
     using Container_t::cbegin;
@@ -154,7 +155,8 @@ public:
 protected:
     explicit Reactor() = delete;
     explicit Reactor(Measure_t const &left_bound, Measure_t const &right_bound,
-                     Measure_t const &bottom_bound, Measure_t const &top_bound);
+                     Measure_t const &bottom_bound, Measure_t const &top_bound,
+                     Measure_t const &border_width);
     virtual ~Reactor();
 
 private:
@@ -162,6 +164,7 @@ private:
     Measure_t right_bound_;
     Measure_t bottom_bound_;
     Measure_t top_bound_;
+    Measure_t border_width_;
 };
 
 } // namespace ReactorSimulation

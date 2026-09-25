@@ -13,13 +13,11 @@ class ControlEngine : public Reactor,
                       public PhysicsEngine {
 public:
     ControlEngine() = delete;
-    explicit ControlEngine(Measure_t const   &left_bound,
-                           Measure_t const   &right_bound,
-                           Measure_t const   &bottom_bound,
-                           Measure_t const   &top_bound,
-                           unsigned int       window_width,
-                           unsigned int       window_height,
-                           std::string const &window_title);
+    explicit ControlEngine(
+        Measure_t const &view_left_bound, Measure_t const &view_right_bound,
+        Measure_t const &view_bottom_bound, Measure_t const &view_top_bound,
+        Measure_t const &border_width, unsigned int window_width,
+        unsigned int window_height, std::string const &window_title);
     ~ControlEngine() override;
 
     bool one_more_iteration();

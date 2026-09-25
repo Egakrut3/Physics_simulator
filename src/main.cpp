@@ -10,8 +10,19 @@
 
 static void test_reactor_simulation() {
     using namespace ReactorSimulation;
-    ControlEngine reactor_controller(-127, 127, -79, 79, 1280, 800,
-                                     "My reactor");
+
+    constexpr Measure_t VIEW_LEFT_BOUND   = -128;
+    constexpr Measure_t VIEW_RIGHT_BOUND  = 128;
+    constexpr Measure_t VIEW_BOTTOM_BOUND = -80;
+    constexpr Measure_t VIEW_TOP_BOUND    = 80;
+    constexpr Measure_t BORDER_WIDTH      = 1;
+
+    constexpr unsigned int WINDOW_WIDTH  = 1280;
+    constexpr unsigned int WINDOW_HEIGHT = 800;
+
+    ControlEngine reactor_controller(
+        VIEW_LEFT_BOUND, VIEW_RIGHT_BOUND, VIEW_BOTTOM_BOUND, VIEW_TOP_BOUND,
+        BORDER_WIDTH, WINDOW_WIDTH, WINDOW_HEIGHT, "My reactor");
 
     reactor_controller.insert(new SimpleMolecule(
         MaterialPoint(Vector2D(0, 0), Vector2D(1e-4, 0), 10), 5));
@@ -19,8 +30,6 @@ static void test_reactor_simulation() {
         MaterialPoint(Vector2D(6, 8), Vector2D(0, 1e-4), 10), 5));
     reactor_controller.insert(new ComplexMolecule(
         MaterialPoint(Vector2D(0, -7.5), Vector2D(1e-4, 1e-4), 10), 5));
-
-    reactor_controller.set_view(-128, 128, -80, 80);
 
     while (reactor_controller.one_more_iteration()) {}
 }
