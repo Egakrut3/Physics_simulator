@@ -21,11 +21,11 @@ bool ControlEngine::one_more_iteration() {
 
     process_events();
     GraphicEngine::clear();
-    draw_molecules(*this);
+    draw_everything(*this);
     display();
 
     Clock_t::time_point const current_time = Clock_t::now();
-    auto time_delta   = std::chrono::duration_cast<std::chrono::milliseconds>(
+    auto time_delta   = std::chrono::duration_cast<std::chrono::microseconds>(
                             current_time - last_update_time_)
                             .count();
     last_update_time_ = current_time;

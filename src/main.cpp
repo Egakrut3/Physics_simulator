@@ -14,11 +14,11 @@ static void test_reactor_simulation() {
                                      "My reactor");
 
     reactor_controller.insert(new SimpleMolecule(
-        MaterialPoint(Vector2D(0, 0), Vector2D(0.5, 0), 10), 5));
+        MaterialPoint(Vector2D(0, 0), Vector2D(1e-4, 0), 10), 5));
     reactor_controller.insert(new SimpleMolecule(
-        MaterialPoint(Vector2D(6, 8), Vector2D(0, 0.5), 10), 5));
+        MaterialPoint(Vector2D(6, 8), Vector2D(0, 1e-4), 10), 5));
     reactor_controller.insert(new ComplexMolecule(
-        MaterialPoint(Vector2D(0, -7.5), Vector2D(0.5, 0.5), 10), 5));
+        MaterialPoint(Vector2D(0, -7.5), Vector2D(1e-4, 1e-4), 10), 5));
 
     reactor_controller.set_view(-128, 128, -80, 80);
 

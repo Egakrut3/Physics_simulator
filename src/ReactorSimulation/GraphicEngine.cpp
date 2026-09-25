@@ -56,17 +56,47 @@ void GraphicEngine::process_events() {
     }
 }
 
-void GraphicEngine::draw_molecules(Reactor const &reactor) {
-    for (std::unordered_set<Molecule *>::const_iterator elem = reactor.begin();
-         elem != reactor.end(); ++elem) {
-        draw(**elem);
-    }
+void GraphicEngine::draw_everything(Reactor const &reactor) {
+    draw_molecules(reactor);
+    draw_borders(reactor);
 }
 void GraphicEngine::display() {
     window_.display();
 }
 void GraphicEngine::clear() {
     window_.clear();
+}
+
+void GraphicEngine::draw_molecules(Reactor const &reactor) {
+    for (std::unordered_set<Molecule *>::const_iterator elem = reactor.begin();
+         elem != reactor.end(); ++elem) {
+        draw(**elem);
+    }
+}
+
+void GraphicEngine::draw_borders(Reactor const &reactor) {
+    float left_bound   = static_cast<float>(reactor.get_left_bound());
+    float right_bound  = static_cast<float>(reactor.get_right_bound());
+    float bottom_bound = static_cast<float>(reactor.get_bottom_bound());
+    float top_bound    = static_cast<float>(reactor.get_top_bound());
+
+    float hight = top_bound - bottom_bound;
+    float width = right_bound - left_bound;
+
+    sf::RectangleShape border(sf::Vector2f(0, hight + 2));
+    border.setOutlineThickness(1);
+
+    border.setPosition(sf::Vector2f(right_bound + 1, -top_bound - 1));
+    window_.draw(border);
+
+    border.setPosition(sf::Vector2f(left_bound - 1, -top_bound - 1));
+    window_.draw(border);
+
+    border.setSize(sf::Vector2f(width + 2, 0));
+    window_.draw(border);
+
+    border.setPosition(sf::Vector2f(left_bound - 1, -bottom_bound + 1));
+    window_.draw(border);
 }
 
 } // namespace ReactorSimulation

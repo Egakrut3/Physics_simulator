@@ -25,11 +25,14 @@ protected:
     bool is_open() const;
     void process_events();
 
-    void draw_molecules(Reactor const &reactor);
+    void draw_everything(Reactor const &reactor);
     void display();
     void clear();
 
 private:
+    void draw_molecules(Reactor const &reactor);
+    void draw_borders(Reactor const &reactor);
+
     sf::RenderWindow window_;
 };
 
