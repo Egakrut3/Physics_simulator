@@ -7,7 +7,7 @@
 
 namespace ReactorSimulation {
 
-typedef double Measure_t;
+typedef double      Measure_t;
 typedef std::size_t Weight_t;
 
 class Vector2D {
@@ -57,11 +57,15 @@ public:
 
     virtual void draw(GraphicEngine &gr_eng) const = 0;
 
-    virtual void advance(PhysicsEngine const &ph_eng, Measure_t const &dt) = 0;
+    virtual void advance(PhysicsEngine const &ph_eng,
+                         Measure_t const     &time_delta) = 0;
 
-    virtual bool collide(Molecule const &mol, PhysicsEngine const &ph_eng) const = 0;
-    virtual bool collide(SimpleMolecule const &mol, PhysicsEngine const &ph_eng) const = 0;
-    virtual bool collide(ComplexMolecule const &mol, PhysicsEngine const &ph_eng) const = 0;
+    virtual bool collide(Molecule const      &mol,
+                         PhysicsEngine const &ph_eng) const   = 0;
+    virtual bool collide(SimpleMolecule const &mol,
+                         PhysicsEngine const  &ph_eng) const  = 0;
+    virtual bool collide(ComplexMolecule const &mol,
+                         PhysicsEngine const   &ph_eng) const = 0;
 
     MaterialPoint center_;
 
@@ -74,16 +78,20 @@ class SimpleMolecule : public Molecule {
 public:
     SimpleMolecule() = delete;
     explicit SimpleMolecule(MaterialPoint const &center,
-                            Measure_t const &radius);
+                            Measure_t const     &radius);
     ~SimpleMolecule() override;
 
     void draw(GraphicEngine &gr_eng) const override;
 
-    void advance(PhysicsEngine const &ph_eng, Measure_t const &dt) override;
+    void advance(PhysicsEngine const &ph_eng,
+                 Measure_t const     &time_delta) override;
 
-    bool collide(Molecule const &mol, PhysicsEngine const &ph_eng) const override;
-    bool collide(SimpleMolecule const &mol, PhysicsEngine const &ph_eng) const override;
-    bool collide(ComplexMolecule const &mol, PhysicsEngine const &ph_eng) const override;
+    bool collide(Molecule const      &mol,
+                 PhysicsEngine const &ph_eng) const override;
+    bool collide(SimpleMolecule const &mol,
+                 PhysicsEngine const  &ph_eng) const override;
+    bool collide(ComplexMolecule const &mol,
+                 PhysicsEngine const   &ph_eng) const override;
 
     Measure_t const radius_;
 };
@@ -92,16 +100,20 @@ class ComplexMolecule : public Molecule {
 public:
     ComplexMolecule() = delete;
     explicit ComplexMolecule(MaterialPoint const &center,
-                             Measure_t const &side_len);
+                             Measure_t const     &side_len);
     ~ComplexMolecule() override;
 
     void draw(GraphicEngine &gr_eng) const override;
 
-    void advance(PhysicsEngine const &ph_eng, Measure_t const &dt) override;
+    void advance(PhysicsEngine const &ph_eng,
+                 Measure_t const     &time_delta) override;
 
-    bool collide(Molecule const &mol, PhysicsEngine const &ph_eng) const override;
-    bool collide(SimpleMolecule const &mol, PhysicsEngine const &ph_eng) const override;
-    bool collide(ComplexMolecule const &mol, PhysicsEngine const &ph_eng) const override;
+    bool collide(Molecule const      &mol,
+                 PhysicsEngine const &ph_eng) const override;
+    bool collide(SimpleMolecule const &mol,
+                 PhysicsEngine const  &ph_eng) const override;
+    bool collide(ComplexMolecule const &mol,
+                 PhysicsEngine const   &ph_eng) const override;
 
     Measure_t const side_len_;
 };

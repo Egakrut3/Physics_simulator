@@ -4,25 +4,29 @@
 namespace ReactorSimulation {
 
 ComplexMolecule::ComplexMolecule(MaterialPoint const &center,
-                                 Measure_t const &side_len) :
+                                 Measure_t const     &side_len) :
     Molecule(center), side_len_(side_len) {}
 ComplexMolecule::~ComplexMolecule() = default;
 
 void ComplexMolecule::draw(GraphicEngine &gr_eng) const {
-    return gr_eng.draw(*this);
+    gr_eng.draw(*this);
 }
 
-void ComplexMolecule::advance(PhysicsEngine const &ph_eng, Measure_t const &dt) {
-    return ph_eng.advance(*this, dt);
+void ComplexMolecule::advance(PhysicsEngine const &ph_eng,
+                              Measure_t const     &time_delta) {
+    ph_eng.advance(*this, time_delta);
 }
 
-bool ComplexMolecule::collide(Molecule const &mol, PhysicsEngine const &ph_eng) const {
+bool ComplexMolecule::collide(Molecule const      &mol,
+                              PhysicsEngine const &ph_eng) const {
     return mol.collide(*this, ph_eng);
 }
-bool ComplexMolecule::collide(SimpleMolecule const &mol, PhysicsEngine const &ph_eng) const {
+bool ComplexMolecule::collide(SimpleMolecule const &mol,
+                              PhysicsEngine const  &ph_eng) const {
     return ph_eng.collide(mol, *this);
 }
-bool ComplexMolecule::collide(ComplexMolecule const &mol, PhysicsEngine const &ph_eng) const {
+bool ComplexMolecule::collide(ComplexMolecule const &mol,
+                              PhysicsEngine const   &ph_eng) const {
     return ph_eng.collide(mol, *this);
 }
 

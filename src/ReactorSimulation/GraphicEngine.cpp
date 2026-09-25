@@ -2,33 +2,41 @@
 
 namespace ReactorSimulation {
 
-GraphicEngine::GraphicEngine(unsigned int width, unsigned int height, std::string const &title) :
-    window_(sf::VideoMode(sf::Vector2u(width, height)), sf::String(title), sf::State::Fullscreen) {}
+GraphicEngine::GraphicEngine(unsigned int width, unsigned int height,
+                             std::string const &title) :
+    window_(sf::VideoMode(sf::Vector2u(width, height)), sf::String(title),
+            sf::State::Fullscreen) {}
 GraphicEngine::~GraphicEngine() = default;
 
 void GraphicEngine::draw(Molecule const &mol) {
     mol.draw(*this);
 }
 void GraphicEngine::draw(SimpleMolecule const &mol) {
-    float float_radius = static_cast<float>(mol.radius_);
+    float           float_radius = static_cast<float>(mol.radius_);
     sf::CircleShape circle(float_radius);
     circle.setOrigin(sf::Vector2f(float_radius, float_radius));
-    circle.setPosition(sf::Vector2f(static_cast<float>(mol.center_.position_.x_coor_), static_cast<float>(mol.center_.position_.y_coor_)));
+    circle.setPosition(
+        sf::Vector2f(static_cast<float>(mol.center_.position_.x_coor_),
+                     static_cast<float>(mol.center_.position_.y_coor_)));
     circle.setFillColor(sf::Color::Green);
     window_.draw(circle);
 }
 void GraphicEngine::draw(ComplexMolecule const &mol) {
-    float float_side_len = static_cast<float>(mol.side_len_);
-    sf::Vector2f square_size(float_side_len, float_side_len);
+    float              float_side_len = static_cast<float>(mol.side_len_);
+    sf::Vector2f       square_size(float_side_len, float_side_len);
     sf::RectangleShape square(square_size);
-    square.setOrigin(square_size / 2.f);
-    square.setPosition(sf::Vector2f(static_cast<float>(mol.center_.position_.x_coor_), static_cast<float>(mol.center_.position_.y_coor_)));
+    square.setOrigin(square_size / 2.F);
+    square.setPosition(
+        sf::Vector2f(static_cast<float>(mol.center_.position_.x_coor_),
+                     static_cast<float>(mol.center_.position_.y_coor_)));
     square.setFillColor(sf::Color::Red);
     window_.draw(square);
 }
 
 void GraphicEngine::draw_molecules(Reactor const &reactor) {
-    for (std::unordered_set<Molecule *>::const_iterator elem = reactor.molecule_arr_.begin(); elem != reactor.molecule_arr_.end(); ++elem) {
+    for (std::unordered_set<Molecule *>::const_iterator elem =
+             reactor.molecule_arr_.begin();
+         elem != reactor.molecule_arr_.end(); ++elem) {
         draw(**elem);
     }
 }

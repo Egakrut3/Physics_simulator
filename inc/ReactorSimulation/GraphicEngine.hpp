@@ -8,7 +8,8 @@ namespace ReactorSimulation {
 
 class GraphicEngine {
 public:
-    explicit GraphicEngine(unsigned int width, unsigned int height, std::string const &title);
+    explicit GraphicEngine(unsigned int width, unsigned int height,
+                           std::string const &title);
     ~GraphicEngine();
 
     void draw(Molecule const &mol);
