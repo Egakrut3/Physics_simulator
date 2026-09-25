@@ -6,6 +6,8 @@ INC						= $(addprefix ReactorSimulation/,$(REACTOR_SIMULATION_INC))
 REACTOR_SIMULATION_SRC	= Vector2D MaterialPoint Molecule SimpleMolecule ComplexMolecule Reactor GraphicEngine PhysicsEngine
 SRC						= $(addprefix ReactorSimulation/,$(REACTOR_SIMULATION_SRC)) main
 
+RUN_TARGET				= prime-run taskset -c 14 ./$(TARGET)
+
 COMMON_MAKEFILE = Common_Makefile.mk
 include $(COMMON_MAKEFILE)
 

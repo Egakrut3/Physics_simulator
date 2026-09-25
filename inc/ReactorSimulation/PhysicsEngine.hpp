@@ -7,7 +7,8 @@ namespace ReactorSimulation {
 
 class PhysicsEngine {
 public:
-    explicit PhysicsEngine() = default;
+    explicit PhysicsEngine();
+    ~PhysicsEngine();
 
     void advance(Molecule &mol, Measure_t const &time_delta) const;
     void advance(SimpleMolecule &mol, Measure_t const &time_delta) const;

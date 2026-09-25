@@ -3,6 +3,9 @@
 
 namespace ReactorSimulation {
 
+PhysicsEngine::PhysicsEngine()  = default;
+PhysicsEngine::~PhysicsEngine() = default;
+
 void PhysicsEngine::advance(Molecule &mol, Measure_t const &time_delta) const {
     mol.advance(*this, time_delta);
 }

@@ -5,7 +5,7 @@ namespace ReactorSimulation {
 GraphicEngine::GraphicEngine(unsigned int width, unsigned int height,
                              std::string const &title) :
     window_(sf::VideoMode(sf::Vector2u(width, height)), sf::String(title),
-            sf::State::Fullscreen) {}
+            sf::State::Windowed) {}
 GraphicEngine::~GraphicEngine() = default;
 
 void GraphicEngine::draw(Molecule const &mol) {
@@ -50,6 +50,17 @@ void GraphicEngine::process_events() {
             window_.close();
         }
     }
+}
+
+void GraphicEngine::set_view(Measure_t const &left_bound,
+                             Measure_t const &right_bound,
+                             Measure_t const &bottom_bound,
+                             Measure_t const &top_bound) {
+    window_.setView(sf::View(sf::FloatRect(
+        sf::Vector2f(static_cast<float>(left_bound),
+                     static_cast<float>(bottom_bound)),
+        sf::Vector2f(static_cast<float>(right_bound - left_bound),
+                     static_cast<float>(top_bound - bottom_bound)))));
 }
 
 void GraphicEngine::display() {

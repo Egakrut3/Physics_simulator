@@ -21,6 +21,9 @@ public:
     bool is_open() const;
     void process_events();
 
+    void set_view(Measure_t const &left_bound, Measure_t const &right_bound,
+                  Measure_t const &bottom_bound, Measure_t const &top_bound);
+
     void display();
     void clear();
 
