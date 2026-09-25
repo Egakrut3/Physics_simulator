@@ -13,13 +13,13 @@
 static void test_reactor_simulation() {
     using namespace ReactorSimulation;
 
-    Reactor test_reactor(-10, 10, -10, 10);
+    Reactor test_reactor(-127, 127, -79, 79);
     test_reactor.molecule_arr_.insert(new SimpleMolecule(
-        MaterialPoint(Vector2D(0, 0), Vector2D(1e-1, 0), 10), 5));
+        MaterialPoint(Vector2D(0, 0), Vector2D(0.5, 0), 10), 5));
     test_reactor.molecule_arr_.insert(new SimpleMolecule(
-        MaterialPoint(Vector2D(6, 8), Vector2D(0, 1e-1), 10), 5));
+        MaterialPoint(Vector2D(6, 8), Vector2D(0, 0.5), 10), 5));
     test_reactor.molecule_arr_.insert(new ComplexMolecule(
-        MaterialPoint(Vector2D(0, -7.5), Vector2D(1e-1, 1e-1), 10), 5));
+        MaterialPoint(Vector2D(0, -7.5), Vector2D(0.5, 0.5), 10), 5));
 
     GraphicEngine gr_eng(1280, 800, "Test reactor");
     gr_eng.set_view(-128, 128, -80, 80);

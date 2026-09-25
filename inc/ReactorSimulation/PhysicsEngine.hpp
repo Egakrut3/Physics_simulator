@@ -14,6 +14,14 @@ public:
     void advance(SimpleMolecule &mol, Measure_t const &time_delta) const;
     void advance(ComplexMolecule &mol, Measure_t const &time_delta) const;
 
+    bool collide_with_vertical(Molecule const &mol, Measure_t const &x_coor) const;
+    bool collide_with_vertical(SimpleMolecule const &mol, Measure_t const &x_coor) const;
+    bool collide_with_vertical(ComplexMolecule const &mol, Measure_t const &x_coor) const;
+
+    bool collide_with_horizontal(Molecule const &mol, Measure_t const &y_coor) const;
+    bool collide_with_horizontal(SimpleMolecule const &mol, Measure_t const &y_coor) const;
+    bool collide_with_horizontal(ComplexMolecule const &mol, Measure_t const &y_coor) const;
+
     bool collide(Molecule const &mol1, Molecule const &mol2) const;
     bool collide(SimpleMolecule const &mol1, SimpleMolecule const &mol2) const;
     bool collide(SimpleMolecule const &mol1, ComplexMolecule const &mol2) const;

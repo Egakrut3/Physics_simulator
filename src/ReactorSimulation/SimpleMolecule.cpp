@@ -17,6 +17,13 @@ void SimpleMolecule::advance(PhysicsEngine const &ph_eng,
     ph_eng.advance(*this, time_delta);
 }
 
+bool SimpleMolecule::collide_with_vertical(PhysicsEngine const &ph_eng, Measure_t const &x_coor) const {
+    return ph_eng.collide_with_vertical(*this, x_coor);
+}
+bool SimpleMolecule::collide_with_horizontal(PhysicsEngine const &ph_eng, Measure_t const &y_coor) const {
+    return ph_eng.collide_with_horizontal(*this, y_coor);
+}
+
 bool SimpleMolecule::collide(Molecule const      &mol,
                              PhysicsEngine const &ph_eng) const {
     return mol.collide(*this, ph_eng);

@@ -60,6 +60,9 @@ public:
     virtual void advance(PhysicsEngine const &ph_eng,
                          Measure_t const     &time_delta) = 0;
 
+    virtual bool collide_with_vertical(PhysicsEngine const &ph_eng, Measure_t const &x_coor) const = 0;
+    virtual bool collide_with_horizontal(PhysicsEngine const &ph_eng, Measure_t const &y_coor) const = 0;
+
     virtual bool collide(Molecule const      &mol,
                          PhysicsEngine const &ph_eng) const   = 0;
     virtual bool collide(SimpleMolecule const &mol,
@@ -86,6 +89,9 @@ public:
     void advance(PhysicsEngine const &ph_eng,
                  Measure_t const     &time_delta) override;
 
+    bool collide_with_vertical(PhysicsEngine const &ph_eng, Measure_t const &x_coor) const override;
+    bool collide_with_horizontal(PhysicsEngine const &ph_eng, Measure_t const &y_coor) const override;
+
     bool collide(Molecule const      &mol,
                  PhysicsEngine const &ph_eng) const override;
     bool collide(SimpleMolecule const &mol,
@@ -108,6 +114,9 @@ public:
     void advance(PhysicsEngine const &ph_eng,
                  Measure_t const     &time_delta) override;
 
+    bool collide_with_vertical(PhysicsEngine const &ph_eng, Measure_t const &x_coor) const override;
+    bool collide_with_horizontal(PhysicsEngine const &ph_eng, Measure_t const &y_coor) const override;
+
     bool collide(Molecule const      &mol,
                  PhysicsEngine const &ph_eng) const override;
     bool collide(SimpleMolecule const &mol,
@@ -128,8 +137,7 @@ public:
     Reactor &operator=(Reactor const &src) = delete;
 
     std::unordered_set<Molecule *> molecule_arr_;
-
-private:
+    
     Measure_t left_bound_;
     Measure_t right_bound_;
     Measure_t bottom_bound_;
