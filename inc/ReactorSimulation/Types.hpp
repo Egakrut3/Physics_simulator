@@ -9,8 +9,6 @@ namespace ReactorSimulation {
 typedef double      Measure_t;
 typedef std::size_t Weight_t;
 
-
-
 class Vector2D {
 public:
     explicit Vector2D();
@@ -36,8 +34,6 @@ Vector2D operator/(Vector2D const &vec, Measure_t const &div);
 
 Measure_t operator*(Vector2D const &vec1, Vector2D const &vec2);
 
-
-
 class MaterialPoint {
 public:
     MaterialPoint() = delete;
@@ -50,8 +46,6 @@ public:
 
     Weight_t const weight_;
 };
-
-
 
 class GraphicEngine;
 class PhysicsEngine;
@@ -68,8 +62,10 @@ public:
     virtual void advance(PhysicsEngine const &ph_eng,
                          Measure_t const     &time_delta) = 0;
 
-    virtual bool collide_with_vertical(PhysicsEngine const &ph_eng, Measure_t const &x_coor) const = 0;
-    virtual bool collide_with_horizontal(PhysicsEngine const &ph_eng, Measure_t const &y_coor) const = 0;
+    virtual bool collide_with_vertical(PhysicsEngine const &ph_eng,
+                                       Measure_t const     &x_coor) const   = 0;
+    virtual bool collide_with_horizontal(PhysicsEngine const &ph_eng,
+                                         Measure_t const     &y_coor) const = 0;
 
     virtual bool collide(Molecule const      &mol,
                          PhysicsEngine const &ph_eng) const   = 0;
@@ -97,8 +93,10 @@ public:
     void advance(PhysicsEngine const &ph_eng,
                  Measure_t const     &time_delta) override;
 
-    bool collide_with_vertical(PhysicsEngine const &ph_eng, Measure_t const &x_coor) const override;
-    bool collide_with_horizontal(PhysicsEngine const &ph_eng, Measure_t const &y_coor) const override;
+    bool collide_with_vertical(PhysicsEngine const &ph_eng,
+                               Measure_t const     &x_coor) const override;
+    bool collide_with_horizontal(PhysicsEngine const &ph_eng,
+                                 Measure_t const     &y_coor) const override;
 
     bool collide(Molecule const      &mol,
                  PhysicsEngine const &ph_eng) const override;
@@ -122,8 +120,10 @@ public:
     void advance(PhysicsEngine const &ph_eng,
                  Measure_t const     &time_delta) override;
 
-    bool collide_with_vertical(PhysicsEngine const &ph_eng, Measure_t const &x_coor) const override;
-    bool collide_with_horizontal(PhysicsEngine const &ph_eng, Measure_t const &y_coor) const override;
+    bool collide_with_vertical(PhysicsEngine const &ph_eng,
+                               Measure_t const     &x_coor) const override;
+    bool collide_with_horizontal(PhysicsEngine const &ph_eng,
+                                 Measure_t const     &y_coor) const override;
 
     bool collide(Molecule const      &mol,
                  PhysicsEngine const &ph_eng) const override;
@@ -145,7 +145,7 @@ public:
     Reactor &operator=(Reactor const &src) = delete;
 
     std::unordered_set<Molecule *> molecule_arr_;
-    
+
     Measure_t left_bound_;
     Measure_t right_bound_;
     Measure_t bottom_bound_;

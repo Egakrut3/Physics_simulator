@@ -7,8 +7,6 @@ namespace ReactorSimulation {
 PhysicsEngine::PhysicsEngine()  = default;
 PhysicsEngine::~PhysicsEngine() = default;
 
-
-
 void PhysicsEngine::advance(Molecule &mol, Measure_t const &time_delta) const {
     mol.advance(*this, time_delta);
 }
@@ -21,35 +19,33 @@ void PhysicsEngine::advance(ComplexMolecule &mol,
     mol.center_.position_ += mol.center_.velocity_ * time_delta;
 }
 
-
-
-bool PhysicsEngine::collide_with_vertical(Molecule const &mol, Measure_t const &x_coor) const {
+bool PhysicsEngine::collide_with_vertical(Molecule const  &mol,
+                                          Measure_t const &x_coor) const {
     return mol.collide_with_vertical(*this, x_coor);
 }
 bool PhysicsEngine::collide_with_vertical(SimpleMolecule const &mol,
-                            Measure_t const &x_coor) const {
+                                          Measure_t const      &x_coor) const {
     return std::abs(x_coor - mol.center_.position_.x_coor_) <= mol.radius_;
 }
 bool PhysicsEngine::collide_with_vertical(ComplexMolecule const &mol,
-                            Measure_t const &x_coor) const {
-    return std::abs(x_coor - mol.center_.position_.x_coor_) <= mol.side_len_ / 2;
+                                          Measure_t const       &x_coor) const {
+    return std::abs(x_coor - mol.center_.position_.x_coor_) <=
+           mol.side_len_ / 2;
 }
 
-
-
-bool PhysicsEngine::collide_with_horizontal(Molecule const &mol, Measure_t const &y_coor) const {
+bool PhysicsEngine::collide_with_horizontal(Molecule const  &mol,
+                                            Measure_t const &y_coor) const {
     return mol.collide_with_horizontal(*this, y_coor);
 }
 bool PhysicsEngine::collide_with_horizontal(SimpleMolecule const &mol,
-                            Measure_t const &y_coor) const {
+                                            Measure_t const &y_coor) const {
     return std::abs(y_coor - mol.center_.position_.y_coor_) <= mol.radius_;
 }
 bool PhysicsEngine::collide_with_horizontal(ComplexMolecule const &mol,
-                            Measure_t const &y_coor) const {
-    return std::abs(y_coor - mol.center_.position_.y_coor_) <= mol.side_len_ / 2;
+                                            Measure_t const &y_coor) const {
+    return std::abs(y_coor - mol.center_.position_.y_coor_) <=
+           mol.side_len_ / 2;
 }
-
-
 
 bool PhysicsEngine::collide(Molecule const &mol1, Molecule const &mol2) const {
     return mol1.collide(mol2, *this);
@@ -85,8 +81,6 @@ bool PhysicsEngine::collide(ComplexMolecule const &mol1,
            (mol1.side_len_ + mol2.side_len_) / 2;
 }
 
-
-
 void PhysicsEngine::advance_state(Reactor         &reactor,
                                   Measure_t const &time_delta) const {
     for (std::unordered_set<Molecule *>::iterator elem =
@@ -96,10 +90,13 @@ void PhysicsEngine::advance_state(Reactor         &reactor,
     }
 }
 
-
-
-static Measure_t calculate_new_velocity_projection(Measure_t const &proj1, Weight_t const &weight1, Measure_t const &proj2, Weight_t const &weight2) {
-    return ((proj1 * static_cast<Measure_t>(weight1 - weight2)) + (proj2 * static_cast<Measure_t>(2 * weight2))) / static_cast<Measure_t>(weight1 + weight2);
+static Measure_t calculate_new_velocity_projection(Measure_t const &proj1,
+                                                   Weight_t const  &weight1,
+                                                   Measure_t const &proj2,
+                                                   Weight_t const  &weight2) {
+    return ((proj1 * static_cast<Measure_t>(weight1 - weight2)) +
+            (proj2 * static_cast<Measure_t>(2 * weight2))) /
+           static_cast<Measure_t>(weight1 + weight2);
 }
 
 static void perform_simple_reflection(MaterialPoint &pnt1,
@@ -113,43 +110,44 @@ static void perform_simple_reflection(MaterialPoint &pnt1,
         return;
     }
 
-    Measure_t new_proj1 = calculate_new_velocity_projection(old_proj1, pnt1.weight_,
-                                                            old_proj2, pnt2.weight_);
-    Measure_t new_proj2 = calculate_new_velocity_projection(old_proj2, pnt2.weight_,
-                                                            old_proj1, pnt1.weight_);
+    Measure_t new_proj1 = calculate_new_velocity_projection(
+        old_proj1, pnt1.weight_, old_proj2, pnt2.weight_);
+    Measure_t new_proj2 = calculate_new_velocity_projection(
+        old_proj2, pnt2.weight_, old_proj1, pnt1.weight_);
 
     pnt1.velocity_ += (new_proj1 - old_proj1) * vec12;
     pnt2.velocity_ += (new_proj2 - old_proj2) * vec12;
 }
 
-
-
-static void perform_horizontal_reflection(MaterialPoint &pnt, Measure_t const &x_coor) {
+static void perform_horizontal_reflection(MaterialPoint   &pnt,
+                                          Measure_t const &x_coor) {
     if ((pnt.position_.x_coor_ < x_coor) == (pnt.velocity_.x_coor_ > 0)) {
         pnt.velocity_.x_coor_ = -pnt.velocity_.x_coor_;
     }
 }
-static void perform_vertical_reflection(MaterialPoint &pnt, Measure_t const &y_coor) {
+static void perform_vertical_reflection(MaterialPoint   &pnt,
+                                        Measure_t const &y_coor) {
     if ((pnt.position_.y_coor_ < y_coor) == (pnt.velocity_.y_coor_ > 0)) {
         pnt.velocity_.y_coor_ = -pnt.velocity_.y_coor_;
     }
 }
-
-
 
 void PhysicsEngine::perform_reflections(Reactor &reactor) const {
     for (std::unordered_set<Molecule *>::iterator elem =
              reactor.molecule_arr_.begin();
          elem != reactor.molecule_arr_.end(); ++elem) {
         if (collide_with_vertical(**elem, reactor.left_bound_)) {
-            perform_horizontal_reflection((*elem)->center_, reactor.left_bound_);
+            perform_horizontal_reflection((*elem)->center_,
+                                          reactor.left_bound_);
         }
         if (collide_with_vertical(**elem, reactor.right_bound_)) {
-            perform_horizontal_reflection((*elem)->center_, reactor.right_bound_);
+            perform_horizontal_reflection((*elem)->center_,
+                                          reactor.right_bound_);
         }
 
         if (collide_with_horizontal(**elem, reactor.bottom_bound_)) {
-            perform_vertical_reflection((*elem)->center_, reactor.bottom_bound_);
+            perform_vertical_reflection((*elem)->center_,
+                                        reactor.bottom_bound_);
         }
         if (collide_with_horizontal(**elem, reactor.top_bound_)) {
             perform_vertical_reflection((*elem)->center_, reactor.top_bound_);
