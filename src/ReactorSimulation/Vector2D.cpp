@@ -1,4 +1,5 @@
 #include "ReactorSimulation/Types.hpp"
+
 #include <cmath>
 
 namespace ReactorSimulation {

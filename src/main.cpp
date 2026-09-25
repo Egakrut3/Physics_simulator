@@ -1,47 +1,28 @@
-#include "ReactorSimulation/GraphicEngine.hpp"
-#include "ReactorSimulation/PhysicsEngine.hpp"
-#include <chrono>
+#include "ReactorSimulation/ControlEngine.hpp"
+#include "ReactorSimulation/Types.hpp"
 
-// TODO - Add overloaded functions for physic interactions, not hard-code them
+// TODO - Make Reactor's getters return reference
 // TODO - Switch to value initialization {}
-// TODO - not delete Reactor()
 // TODO - restirct
-// TODO - C++ modules
 // TODO - My macros
+// TODO - C++ modules
 // TODO - How to differ between Compilation end and Build end
 
 static void test_reactor_simulation() {
     using namespace ReactorSimulation;
+    ControlEngine reactor_controller(-127, 127, -79, 79, 1280, 800,
+                                     "My reactor");
 
-    Reactor test_reactor(-127, 127, -79, 79);
-    test_reactor.molecule_arr_.insert(new SimpleMolecule(
+    reactor_controller.insert(new SimpleMolecule(
         MaterialPoint(Vector2D(0, 0), Vector2D(0.5, 0), 10), 5));
-    test_reactor.molecule_arr_.insert(new SimpleMolecule(
+    reactor_controller.insert(new SimpleMolecule(
         MaterialPoint(Vector2D(6, 8), Vector2D(0, 0.5), 10), 5));
-    test_reactor.molecule_arr_.insert(new ComplexMolecule(
+    reactor_controller.insert(new ComplexMolecule(
         MaterialPoint(Vector2D(0, -7.5), Vector2D(0.5, 0.5), 10), 5));
 
-    GraphicEngine gr_eng(1280, 800, "Test reactor");
-    gr_eng.set_view(-128, 128, -80, 80);
+    reactor_controller.set_view(-128, 128, -80, 80);
 
-    PhysicsEngine                     ph_eng{};
-    typedef std::chrono::steady_clock Clock_t;
-    Clock_t::time_point               last_update_time = Clock_t::now();
-
-    while (gr_eng.is_open()) {
-        gr_eng.process_events();
-        gr_eng.clear();
-        gr_eng.draw_molecules(test_reactor);
-        gr_eng.display();
-
-        Clock_t::time_point current_time = Clock_t::now();
-        auto time_delta = std::chrono::duration_cast<std::chrono::milliseconds>(
-                              current_time - last_update_time)
-                              .count();
-        last_update_time = current_time;
-        ph_eng.advance_state(test_reactor, static_cast<Measure_t>(time_delta));
-        ph_eng.perform_reflections(test_reactor);
-    }
+    while (reactor_controller.one_more_iteration()) {}
 }
 
 int main() {

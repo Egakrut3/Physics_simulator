@@ -6,6 +6,9 @@
 
 namespace ReactorSimulation {
 
+class GraphicEngine;
+class PhysicsEngine;
+
 typedef double      Measure_t;
 typedef std::size_t Weight_t;
 
@@ -26,6 +29,7 @@ public:
     Measure_t x_coor_;
     Measure_t y_coor_;
 };
+
 Vector2D operator+(Vector2D const &left, Vector2D const &right);
 Vector2D operator-(Vector2D const &left, Vector2D const &right);
 Vector2D operator*(Vector2D const &vec, Measure_t const &mlt);
@@ -46,9 +50,6 @@ public:
 
     Weight_t const weight_;
 };
-
-class GraphicEngine;
-class PhysicsEngine;
 
 class SimpleMolecule;
 class ComplexMolecule;
@@ -135,17 +136,28 @@ public:
     Measure_t const side_len_;
 };
 
-class Reactor {
+typedef std::unordered_set<Molecule *> Container_t;
+
+class Reactor : private Container_t {
 public:
+    Measure_t get_left_bound() const;
+    Measure_t get_right_bound() const;
+    Measure_t get_bottom_bound() const;
+    Measure_t get_top_bound() const;
+
+    using Container_t::begin;
+    using Container_t::cbegin;
+    using Container_t::cend;
+    using Container_t::end;
+    using Container_t::insert;
+
+protected:
     explicit Reactor() = delete;
     explicit Reactor(Measure_t const &left_bound, Measure_t const &right_bound,
                      Measure_t const &bottom_bound, Measure_t const &top_bound);
-    ~Reactor();
+    virtual ~Reactor();
 
-    Reactor &operator=(Reactor const &src) = delete;
-
-    std::unordered_set<Molecule *> molecule_arr_;
-
+private:
     Measure_t left_bound_;
     Measure_t right_bound_;
     Measure_t bottom_bound_;

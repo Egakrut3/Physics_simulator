@@ -2,16 +2,28 @@
 
 namespace ReactorSimulation {
 
+Measure_t Reactor::get_left_bound() const {
+    return left_bound_;
+}
+Measure_t Reactor::get_right_bound() const {
+    return right_bound_;
+}
+Measure_t Reactor::get_bottom_bound() const {
+    return bottom_bound_;
+}
+Measure_t Reactor::get_top_bound() const {
+    return top_bound_;
+}
+
 Reactor::Reactor(Measure_t const &left_bound, Measure_t const &right_bound,
                  Measure_t const &bottom_bound, Measure_t const &top_bound) :
-    molecule_arr_(),
+    Container_t(),
     left_bound_(left_bound),
     right_bound_(right_bound),
     bottom_bound_(bottom_bound),
     top_bound_(top_bound) {}
 Reactor::~Reactor() {
-    for (std::unordered_set<Molecule *>::iterator elem = molecule_arr_.begin();
-         elem != molecule_arr_.end(); ++elem) {
+    for (Container_t::iterator elem = begin(); elem != end(); ++elem) {
         delete *elem;
     }
 }

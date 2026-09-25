@@ -1,11 +1,9 @@
 #include "ReactorSimulation/PhysicsEngine.hpp"
+
 #include <cmath>
 #include <algorithm>
 
 namespace ReactorSimulation {
-
-PhysicsEngine::PhysicsEngine()  = default;
-PhysicsEngine::~PhysicsEngine() = default;
 
 void PhysicsEngine::advance(Molecule &mol, Measure_t const &time_delta) const {
     mol.advance(*this, time_delta);
@@ -81,11 +79,13 @@ bool PhysicsEngine::collide(ComplexMolecule const &mol1,
            (mol1.side_len_ + mol2.side_len_) / 2;
 }
 
+PhysicsEngine::PhysicsEngine()  = default;
+PhysicsEngine::~PhysicsEngine() = default;
+
 void PhysicsEngine::advance_state(Reactor         &reactor,
                                   Measure_t const &time_delta) const {
-    for (std::unordered_set<Molecule *>::iterator elem =
-             reactor.molecule_arr_.begin();
-         elem != reactor.molecule_arr_.end(); ++elem) {
+    for (std::unordered_set<Molecule *>::iterator elem = reactor.begin();
+         elem != reactor.end(); ++elem) {
         advance(**elem, time_delta);
     }
 }
@@ -132,38 +132,45 @@ static void perform_vertical_reflection(MaterialPoint   &pnt,
     }
 }
 
-void PhysicsEngine::perform_reflections(Reactor &reactor) const {
-    for (std::unordered_set<Molecule *>::iterator elem =
-             reactor.molecule_arr_.begin();
-         elem != reactor.molecule_arr_.end(); ++elem) {
-        if (collide_with_vertical(**elem, reactor.left_bound_)) {
+void PhysicsEngine::perform_border_reflections(Reactor &reactor) const {
+    for (std::unordered_set<Molecule *>::iterator elem = reactor.begin();
+         elem != reactor.end(); ++elem) {
+        if (collide_with_vertical(**elem, reactor.get_left_bound())) {
             perform_horizontal_reflection((*elem)->center_,
-                                          reactor.left_bound_);
+                                          reactor.get_left_bound());
         }
-        if (collide_with_vertical(**elem, reactor.right_bound_)) {
+        if (collide_with_vertical(**elem, reactor.get_right_bound())) {
             perform_horizontal_reflection((*elem)->center_,
-                                          reactor.right_bound_);
+                                          reactor.get_right_bound());
         }
 
-        if (collide_with_horizontal(**elem, reactor.bottom_bound_)) {
+        if (collide_with_horizontal(**elem, reactor.get_bottom_bound())) {
             perform_vertical_reflection((*elem)->center_,
-                                        reactor.bottom_bound_);
+                                        reactor.get_bottom_bound());
         }
-        if (collide_with_horizontal(**elem, reactor.top_bound_)) {
-            perform_vertical_reflection((*elem)->center_, reactor.top_bound_);
+        if (collide_with_horizontal(**elem, reactor.get_top_bound())) {
+            perform_vertical_reflection((*elem)->center_,
+                                        reactor.get_top_bound());
         }
     }
+}
 
-    for (std::unordered_set<Molecule *>::iterator elem1 =
-             reactor.molecule_arr_.begin();
-         elem1 != reactor.molecule_arr_.end(); ++elem1) {
+void PhysicsEngine::perform_between_molecule_reflections(
+    Reactor &reactor) const {
+    for (std::unordered_set<Molecule *>::iterator elem1 = reactor.begin();
+         elem1 != reactor.end(); ++elem1) {
         for (std::unordered_set<Molecule *>::iterator elem2 = std::next(elem1);
-             elem2 != reactor.molecule_arr_.end(); ++elem2) {
+             elem2 != reactor.end(); ++elem2) {
             if (collide(**elem1, **elem2)) {
                 perform_simple_reflection((*elem1)->center_, (*elem2)->center_);
             }
         }
     }
+}
+
+void PhysicsEngine::perform_reflections(Reactor &reactor) const {
+    perform_border_reflections(reactor);
+    perform_between_molecule_reflections(reactor);
 }
 
 } // namespace ReactorSimulation

@@ -7,9 +7,6 @@ namespace ReactorSimulation {
 
 class PhysicsEngine {
 public:
-    explicit PhysicsEngine();
-    ~PhysicsEngine();
-
     void advance(Molecule &mol, Measure_t const &time_delta) const;
     void advance(SimpleMolecule &mol, Measure_t const &time_delta) const;
     void advance(ComplexMolecule &mol, Measure_t const &time_delta) const;
@@ -35,8 +32,16 @@ public:
     bool collide(ComplexMolecule const &mol1,
                  ComplexMolecule const &mol2) const;
 
+protected:
+    explicit PhysicsEngine();
+    virtual ~PhysicsEngine();
+
     void advance_state(Reactor &reactor, Measure_t const &time_delta) const;
     void perform_reflections(Reactor &reactor) const;
+
+private:
+    void perform_border_reflections(Reactor &reactor) const;
+    void perform_between_molecule_reflections(Reactor &reactor) const;
 };
 
 } // namespace ReactorSimulation
